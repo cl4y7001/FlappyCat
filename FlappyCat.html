@@ -19,23 +19,40 @@
     <canvas id="gameCanvas"></canvas>
     <script>
         const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+        let ctx;
+if (!ctx) ctx = canvas.getContext('2d');
 
-        canvas.width = 400;
-        canvas.height = 600;
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            adjustGameConstants();
+        }
 
-        const GRAVITY = 0.3;
-        const FLAP_STRENGTH = -6;
-        const PIPE_WIDTH = 70;
-        const PIPE_SPEED = 2;
+        function adjustGameConstants() {
+            GRAVITY = 0.002 * canvas.height;
+            FLAP_STRENGTH = -0.015 * canvas.height;
+            PIPE_WIDTH = 0.15 * canvas.width;
+            PIPE_SPEED = 0.005 * canvas.width;
+            bird.x = 0.1 * canvas.width;
+            bird.y = canvas.height / 2;
+            bird.velocity = 0;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial resize
+
+        let GRAVITY;
+        let FLAP_STRENGTH;
+        let PIPE_WIDTH;
+        let PIPE_SPEED;
 
         const birdImg = new Image();
-        birdImg.src = 'https://github.com/cl4y7001/FlappyCat/blob/main/bird.png?raw=true';
+        birdImg.src = 'bird.png';
 
         const backgroundImg = new Image();
-        backgroundImg.src = 'https://github.com/cl4y7001/FlappyCat/blob/main/background.png?raw=true';
+        backgroundImg.src = 'background.png';
 
-        let bird = { x: 50, y: canvas.height / 2, velocity: 0 };
+        let bird = { x: 0.1 * canvas.width, y: canvas.height / 2, velocity: 0 };
         let pipes = [];
         let score = 0;
         let gameActive = true;
@@ -44,13 +61,13 @@
         let pipeTimer = 0;
 
         function createPipe() {
-            const pipeGap = Math.random() * 10 + 170; // Randomize gap size
-            const height = Math.random() * (canvas.height - pipeGap) ; // Randomize opening position
+            const pipeGap = Math.random() * 0.2 * canvas.height + 0.25 * canvas.height; // Randomize gap size
+            const height = Math.random() * (canvas.height - pipeGap - 0.1 * canvas.height) + 0.1 * canvas.height; // Randomize opening position
             pipes.push({ x: canvas.width, height, gap: pipeGap });
         }
 
         function resetGame() {
-            bird = { x: 50, y: canvas.height / 2, velocity: 0 };
+            bird = { x: 0.1 * canvas.width, y: canvas.height / 2, velocity: 0 };
             pipes = [];
             score = 0;
             gameActive = true;
@@ -60,7 +77,7 @@
         }
 
         function drawBird() {
-            ctx.drawImage(birdImg, bird.x, bird.y, 50, 50);
+            ctx.drawImage(birdImg, bird.x, bird.y, 0.05 * canvas.width, 0.05 * canvas.width);
         }
 
         function drawPipes() {
@@ -90,20 +107,20 @@
             if (pipeTimer >= pipeDelay) {
                 createPipe();
                 pipeTimer = 0;
-                pipeDelay = Math.random() * 100 + 80; // Randomize next pipe delay
+                pipeDelay = Math.random() * 100 + 150; // Randomize next pipe delay
             }
         }
 
         function checkCollision() {
-            if (bird.y <= 0 || bird.y + 50 >= canvas.height) {
+            if (bird.y <= 0 || bird.y + 0.05 * canvas.width >= canvas.height) {
                 gameActive = false;
             }
 
             pipes.forEach(pipe => {
                 if (
-                    bird.x + 50 > pipe.x &&
+                    bird.x + 0.05 * canvas.width > pipe.x &&
                     bird.x < pipe.x + PIPE_WIDTH &&
-                    (bird.y < pipe.height || bird.y + 50 > pipe.height + pipe.gap)
+                    (bird.y < pipe.height || bird.y + 0.05 * canvas.width > pipe.height + pipe.gap)
                 ) {
                     gameActive = false;
                 }
@@ -115,7 +132,7 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             ctx.fillStyle = 'white';
-            ctx.font = '30px Arial';
+            ctx.font = `${Math.floor(0.05 * canvas.width)}px Arial`;
             ctx.textAlign = 'center';
             ctx.fillText(`Game Over! Score: ${score}`, canvas.width / 2, canvas.height / 2 - 20);
             ctx.fillText('Click to Restart', canvas.width / 2, canvas.height / 2 + 20);
@@ -133,7 +150,7 @@
                 drawBird();
 
                 ctx.fillStyle = 'black';
-                ctx.font = '20px Arial';
+                ctx.font = `${Math.floor(0.03 * canvas.width)}px Arial`;
                 ctx.fillText(`Score: ${score}`, 10, 30);
             } else {
                 gameOverScreen();
