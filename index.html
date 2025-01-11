@@ -18,13 +18,13 @@
 <body>
     <canvas id="gameCanvas"></canvas>
     <audio id="backgroundMusic" loop>
-        <source src="background-music.mp3" type="audio/mpeg">
+        <source src="./background-music.mp3" type="audio/mpeg">
     </audio>
     <audio id="flapSound">
-        <source src="flap-sound.mp3" type="audio/mpeg">
+        <source src="./flap-sound.mp3" type="audio/mpeg">
     </audio>
     <audio id="gameOverSound">
-        <source src="game-over-sound.mp3" type="audio/mpeg">
+        <source src="./game-over-sound.mp3" type="audio/mpeg">
     </audio>
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -48,10 +48,10 @@
         let PIPE_SPEED = 0.005 * window.innerWidth;
 
         const birdImg = new Image();
-        birdImg.src = 'bird.png';
+        birdImg.src = './bird.png';
 
         const backgroundImg = new Image();
-        backgroundImg.src = 'background.png';
+        backgroundImg.src = './background.png';
 
         let bird;
         let pipes = [];
