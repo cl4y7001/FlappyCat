@@ -19,8 +19,7 @@
     <canvas id="gameCanvas"></canvas>
     <script>
         const canvas = document.getElementById('gameCanvas');
-        let ctx;
-if (!ctx) ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d');
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -31,7 +30,7 @@ if (!ctx) ctx = canvas.getContext('2d');
         function adjustGameConstants() {
             GRAVITY = 0.002 * canvas.height;
             FLAP_STRENGTH = -0.015 * canvas.height;
-            PIPE_WIDTH = 0.15 * canvas.width;
+            PIPE_WIDTH = 0.1 * canvas.width;
             PIPE_SPEED = 0.005 * canvas.width;
             bird.x = 0.1 * canvas.width;
             bird.y = canvas.height / 2;
@@ -39,30 +38,27 @@ if (!ctx) ctx = canvas.getContext('2d');
         }
 
         window.addEventListener('resize', resizeCanvas);
-        resizeCanvas(); // Initial resize
+        resizeCanvas();
 
-        let GRAVITY;
-        let FLAP_STRENGTH;
-        let PIPE_WIDTH;
-        let PIPE_SPEED;
+        let GRAVITY, FLAP_STRENGTH, PIPE_WIDTH, PIPE_SPEED;
 
         const birdImg = new Image();
-        birdImg.src = 'bird.png';
+        birdImg.src = 'https://github.com/cl4y7001/FlappyCat/blob/main/bird.png?raw=true';
 
         const backgroundImg = new Image();
-        backgroundImg.src = 'background.png';
+        backgroundImg.src = 'https://github.com/cl4y7001/FlappyCat/blob/main/background.png?raw=true';
 
         let bird = { x: 0.1 * canvas.width, y: canvas.height / 2, velocity: 0 };
         let pipes = [];
         let score = 0;
         let gameActive = true;
 
-        let pipeDelay = Math.random() * 100 + 150; // Randomize initial pipe delay
+        let pipeDelay = Math.random() * 100 + 150;
         let pipeTimer = 0;
 
         function createPipe() {
-            const pipeGap = Math.random() * 0.2 * canvas.height + 0.25 * canvas.height; // Randomize gap size
-            const height = Math.random() * (canvas.height - pipeGap - 0.1 * canvas.height) + 0.1 * canvas.height; // Randomize opening position
+            const pipeGap = Math.random() * 0.2 * canvas.height + 0.25 * canvas.height;
+            const height = Math.random() * (canvas.height - pipeGap - 0.1 * canvas.height) + 0.1 * canvas.height;
             pipes.push({ x: canvas.width, height, gap: pipeGap });
         }
 
@@ -72,7 +68,7 @@ if (!ctx) ctx = canvas.getContext('2d');
             score = 0;
             gameActive = true;
             pipeTimer = 0;
-            pipeDelay = Math.random() * 100 + 150; // Reset random delay
+            pipeDelay = Math.random() * 100 + 150;
             createPipe();
         }
 
@@ -107,7 +103,7 @@ if (!ctx) ctx = canvas.getContext('2d');
             if (pipeTimer >= pipeDelay) {
                 createPipe();
                 pipeTimer = 0;
-                pipeDelay = Math.random() * 100 + 150; // Randomize next pipe delay
+                pipeDelay = Math.random() * 100 + 150;
             }
         }
 
