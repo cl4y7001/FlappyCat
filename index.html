@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Cat</title>
+    <title>Flappy Bird</title>
     <style>
         body {
             margin: 0;
@@ -21,6 +21,22 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
+        let GRAVITY = 0.00000000001 * window.innerHeight;
+        let FLAP_STRENGTH = -0.2 * window.innerHeight;
+        let PIPE_WIDTH = 0.15 * window.innerWidth;
+        let PIPE_SPEED = 0.005 * window.innerWidth;
+
+        const birdImg = new Image();
+        birdImg.src = 'bird.png';
+
+        const backgroundImg = new Image();
+        backgroundImg.src = 'background.png';
+
+        let bird;
+        let pipes = [];
+        let score = 0;
+        let gameActive = true;
+
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -28,39 +44,29 @@
         }
 
         function adjustGameConstants() {
-            GRAVITY = 0.002 * canvas.height;
-            FLAP_STRENGTH = -0.015 * canvas.height;
-            PIPE_WIDTH = 0.1 * canvas.width;
+            GRAVITY = 0.001 * canvas.height;
+            FLAP_STRENGTH = -0.02 * canvas.height;
+            PIPE_WIDTH = 0.15 * canvas.width;
             PIPE_SPEED = 0.005 * canvas.width;
-            bird.x = 0.1 * canvas.width;
-            bird.y = canvas.height / 2;
-            bird.velocity = 0;
+
+            if (!bird) {
+                bird = { x: 0.1 * canvas.width, y: canvas.height / 2, velocity: 0 };
+            } else {
+                bird.x = 0.1 * canvas.width;
+                bird.y = canvas.height / 2;
+                bird.velocity = 0;
+            }
         }
 
         window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        resizeCanvas(); // Initial resize
 
-        let GRAVITY, FLAP_STRENGTH, PIPE_WIDTH, PIPE_SPEED;
-
-        const birdImg = new Image();
-        birdImg.src = './bird.png';
-       // birdImg.src = 'https://github.com/cl4y7001/FlappyCat/blob/main/bird.png?raw=true';
-
-        const backgroundImg = new Image();
-        backgroundImg.src = './background.png';
-        //backgroundImg.src = 'https://github.com/cl4y7001/FlappyCat/blob/main/background.png?raw=true';
-
-        let bird = { x: 0.1 * canvas.width, y: canvas.height / 2, velocity: 0 };
-        let pipes = [];
-        let score = 0;
-        let gameActive = true;
-
-        let pipeDelay = Math.random() * 100 + 150;
+        let pipeDelay = Math.random() * 100 + 150; // Randomize initial pipe delay
         let pipeTimer = 0;
 
         function createPipe() {
-            const pipeGap = Math.random() * 0.2 * canvas.height + 0.25 * canvas.height;
-            const height = Math.random() * (canvas.height - pipeGap - 0.1 * canvas.height) + 0.1 * canvas.height;
+            const pipeGap = Math.random() * 0.2 * canvas.height + 0.25 * canvas.height; // Randomize gap size
+            const height = Math.random() * (canvas.height - pipeGap - 0.1 * canvas.height) + 0.1 * canvas.height; // Randomize opening position
             pipes.push({ x: canvas.width, height, gap: pipeGap });
         }
 
@@ -70,12 +76,12 @@
             score = 0;
             gameActive = true;
             pipeTimer = 0;
-            pipeDelay = Math.random() * 100 + 150;
+            pipeDelay = Math.random() * 100 + 150; // Reset random delay
             createPipe();
         }
 
         function drawBird() {
-            ctx.drawImage(birdImg, bird.x, bird.y, 0.05 * canvas.width, 0.05 * canvas.width);
+            ctx.drawImage(birdImg, bird.x, bird.y, 0.1 * canvas.width, 0.1 * canvas.width);
         }
 
         function drawPipes() {
@@ -105,7 +111,7 @@
             if (pipeTimer >= pipeDelay) {
                 createPipe();
                 pipeTimer = 0;
-                pipeDelay = Math.random() * 100 + 150;
+                pipeDelay = Math.random() * 100 + 150; // Randomize next pipe delay
             }
         }
 
