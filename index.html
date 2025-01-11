@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird</title>
+    <title>Flappy Cat</title>
     <style>
         body {
             margin: 0;
@@ -17,20 +17,41 @@
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
+    <audio id="backgroundMusic" loop>
+        <source src="background-music.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="flapSound">
+        <source src="flap-sound.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="gameOverSound">
+        <source src="game-over-sound.mp3" type="audio/mpeg">
+    </audio>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        let GRAVITY = 0.000000000001 * window.innerHeight;
-        let FLAP_STRENGTH = -0.15 * window.innerHeight;
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const flapSound = document.getElementById('flapSound');
+        const gameOverSound = document.getElementById('gameOverSound');
+
+        let hasPlayedGameOverSound = false;
+
+        window.addEventListener('click', () => {
+            backgroundMusic.play().catch(error => {
+                console.error("Background music autoplay was blocked: ", error);
+            });
+        });
+
+        let GRAVITY = 0.00000000001 * window.innerHeight;
+        let FLAP_STRENGTH = -0.2 * window.innerHeight;
         let PIPE_WIDTH = 0.15 * window.innerWidth;
         let PIPE_SPEED = 0.005 * window.innerWidth;
 
         const birdImg = new Image();
-        birdImg.src = './bird.png';
+        birdImg.src = 'bird.png';
 
         const backgroundImg = new Image();
-        backgroundImg.src = './background_ipad_ratio.png';
+        backgroundImg.src = 'background.png';
 
         let bird;
         let pipes = [];
@@ -77,6 +98,7 @@
             gameActive = true;
             pipeTimer = 0;
             pipeDelay = Math.random() * 100 + 150; // Reset random delay
+            hasPlayedGameOverSound = false;
             createPipe();
         }
 
@@ -140,6 +162,11 @@
             ctx.textAlign = 'center';
             ctx.fillText(`Game Over! Score: ${score}`, canvas.width / 2, canvas.height / 2 - 20);
             ctx.fillText('Click to Restart', canvas.width / 2, canvas.height / 2 + 20);
+
+            if (!hasPlayedGameOverSound) {
+                gameOverSound.play();
+                hasPlayedGameOverSound = true;
+            }
         }
 
         function gameLoop() {
@@ -166,6 +193,7 @@
         document.addEventListener('keydown', e => {
             if (e.code === 'Space' && gameActive) {
                 bird.velocity = FLAP_STRENGTH;
+                flapSound.play();
             }
         });
 
@@ -174,6 +202,7 @@
                 resetGame();
             } else {
                 bird.velocity = FLAP_STRENGTH;
+                flapSound.play();
             }
         });
 
