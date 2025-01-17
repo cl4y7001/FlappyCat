@@ -110,7 +110,7 @@
         let pipeTimer = 0;
 
         function createPipe() {
-            const pipeGap = Math.random() * 0.01 * canvas.height + 0.3 * canvas.height; // Reduced gap size
+            const pipeGap = Math.random() * 0.005 * canvas.height + 0.32 * canvas.height; // Reduced gap size
             const height = Math.random() * (canvas.height - pipeGap - 0.1 * canvas.height) + 0.1 * canvas.height;
             pipes.push({ x: canvas.width, height, gap: pipeGap });
         }
