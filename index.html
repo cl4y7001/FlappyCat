@@ -13,10 +13,28 @@
         canvas {
             display: block;
         }
+        #congrats {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            font-size: 2em;
+        }
+        #congrats img {
+            height: 60vw;
+            width: auto;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
+    <div id="congrats">
+        <p>Congratulations! You Win!</p>
+        <img src="./congrats-image.png" alt="Congratulations">
+    </div>
     <audio id="backgroundMusic" loop>
         <source src="./background-music.mp3" type="audio/mpeg">
     </audio>
@@ -26,6 +44,9 @@
     <audio id="gameOverSound">
         <source src="./game-over-sound.mp3" type="audio/mpeg">
     </audio>
+    <audio id="winSound">
+        <source src="./win-sound.mp3" type="audio/mpeg">
+    </audio>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -33,8 +54,12 @@
         const backgroundMusic = document.getElementById('backgroundMusic');
         const flapSound = document.getElementById('flapSound');
         const gameOverSound = document.getElementById('gameOverSound');
+        const winSound = document.getElementById('winSound');
+        const congratsDiv = document.getElementById('congrats');
 
         let hasPlayedGameOverSound = false;
+        let targetScore = 10; // Set target score to win
+        let gameWon = false;
 
         window.addEventListener('click', () => {
             backgroundMusic.play().catch(error => {
@@ -80,14 +105,14 @@
         }
 
         window.addEventListener('resize', resizeCanvas);
-        resizeCanvas(); // Initial resize
+        resizeCanvas();
 
-        let pipeDelay = Math.random() * 100 + 150; // Randomize initial pipe delay
+        let pipeDelay = Math.random() * 100 + 150;
         let pipeTimer = 0;
 
         function createPipe() {
-            const pipeGap = Math.random() * 0.2 * canvas.height + 0.25 * canvas.height; // Randomize gap size
-            const height = Math.random() * (canvas.height - pipeGap - 0.1 * canvas.height) + 0.1 * canvas.height; // Randomize opening position
+            const pipeGap = Math.random() * 0.2 * canvas.height + 0.25 * canvas.height;
+            const height = Math.random() * (canvas.height - pipeGap - 0.1 * canvas.height) + 0.1 * canvas.height;
             pipes.push({ x: canvas.width, height, gap: pipeGap });
         }
 
@@ -96,8 +121,10 @@
             pipes = [];
             score = 0;
             gameActive = true;
+            gameWon = false;
+            congratsDiv.style.display = 'none';
             pipeTimer = 0;
-            pipeDelay = Math.random() * 100 + 150; // Reset random delay
+            pipeDelay = Math.random() * 100 + 150;
             hasPlayedGameOverSound = false;
             createPipe();
         }
@@ -127,13 +154,18 @@
             if (pipes[0] && pipes[0].x + PIPE_WIDTH < 0) {
                 pipes.shift();
                 score++;
+                if (score >= targetScore) {
+                    gameWon = true;
+                    gameActive = false;
+                    showCongrats();
+                }
             }
 
             pipeTimer++;
             if (pipeTimer >= pipeDelay) {
                 createPipe();
                 pipeTimer = 0;
-                pipeDelay = Math.random() * 100 + 150; // Randomize next pipe delay
+                pipeDelay = Math.random() * 100 + 150;
             }
         }
 
@@ -151,6 +183,13 @@
                     gameActive = false;
                 }
             });
+        }
+
+        function showCongrats() {
+            backgroundMusic.pause();
+            backgroundMusic.currentTime = 0;
+            winSound.play();
+            congratsDiv.style.display = 'block';
         }
 
         function gameOverScreen() {
@@ -183,6 +222,8 @@
                 ctx.fillStyle = 'black';
                 ctx.font = `${Math.floor(0.03 * canvas.width)}px Arial`;
                 ctx.fillText(`Score: ${score}`, 10, 30);
+            } else if (gameWon) {
+                // Do nothing, as congrats screen is shown
             } else {
                 gameOverScreen();
             }
@@ -198,9 +239,9 @@
         });
 
         canvas.addEventListener('click', () => {
-            if (!gameActive) {
+            if (!gameActive && !gameWon) {
                 resetGame();
-            } else {
+            } else if (gameActive) {
                 bird.velocity = FLAP_STRENGTH;
                 flapSound.play();
             }
