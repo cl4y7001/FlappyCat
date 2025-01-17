@@ -91,7 +91,7 @@
 
         function adjustGameConstants() {
             GRAVITY = 0.001 * canvas.height;
-            FLAP_STRENGTH = -0.02 * canvas.height;
+            FLAP_STRENGTH = -0.015 * canvas.height;
             PIPE_WIDTH = 0.15 * canvas.width;
             PIPE_SPEED = 0.005 * canvas.width;
 
@@ -107,7 +107,7 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        let pipeDelay = 100; // Reduced delay to make pipes more frequent
+        let pipeDelay = 130; // Reduced delay to make pipes more frequent
         let pipeTimer = 0;
 
         function createPipe() {
