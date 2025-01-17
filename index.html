@@ -68,7 +68,7 @@
         });
 
         let GRAVITY = 0.00000000001 * window.innerHeight;
-        let FLAP_STRENGTH = -0.16 * window.innerHeight;
+        let FLAP_STRENGTH = -0.17 * window.innerHeight;
         let PIPE_WIDTH = 0.15 * window.innerWidth;
         let PIPE_SPEED = 0.005 * window.innerWidth;
 
@@ -91,7 +91,7 @@
 
         function adjustGameConstants() {
             GRAVITY = 0.001 * canvas.height;
-            FLAP_STRENGTH = -0.016 * canvas.height;
+            FLAP_STRENGTH = -0.02 * canvas.height;
             PIPE_WIDTH = 0.15 * canvas.width;
             PIPE_SPEED = 0.005 * canvas.width;
 
@@ -107,7 +107,7 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        let pipeDelay = 150; // Reduced delay to make pipes more frequent
+        let pipeDelay = 120; // Adjusted for consistent spacing
         let pipeTimer = 0;
 
         function createPipe() {
@@ -124,7 +124,7 @@
             gameWon = false;
             congratsDiv.style.display = 'none';
             pipeTimer = 0;
-            pipeDelay = 150; // Reset delay for pipes
+            pipeDelay = 120; // Reset delay for pipes
             hasPlayedGameOverSound = false;
             PIPE_SPEED = 0.005 * canvas.width; // Reset PIPE_SPEED
             createPipe();
@@ -158,9 +158,6 @@
 
                 // Increase PIPE_SPEED by 0.1% of canvas width per score
                 PIPE_SPEED += 0.001 * canvas.width;
-
-                // Dynamically adjust pipeDelay to avoid gaps
-                pipeDelay = Math.max(50, 150 - Math.floor(PIPE_SPEED * 20));
 
                 if (score >= targetScore) {
                     gameWon = true;
