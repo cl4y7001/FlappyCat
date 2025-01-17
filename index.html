@@ -107,11 +107,11 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        let pipeDelay = Math.random() * 100 + 150;
+        let pipeDelay = 100; // Reduced delay to make pipes more frequent
         let pipeTimer = 0;
 
         function createPipe() {
-            const pipeGap = Math.random() * 0.2 * canvas.height + 0.25 * canvas.height;
+            const pipeGap = Math.random() * 0.15 * canvas.height + 0.2 * canvas.height; // Reduced gap size
             const height = Math.random() * (canvas.height - pipeGap - 0.1 * canvas.height) + 0.1 * canvas.height;
             pipes.push({ x: canvas.width, height, gap: pipeGap });
         }
@@ -124,7 +124,7 @@
             gameWon = false;
             congratsDiv.style.display = 'none';
             pipeTimer = 0;
-            pipeDelay = Math.random() * 100 + 150;
+            pipeDelay = 100; // Reset delay for pipes
             hasPlayedGameOverSound = false;
             PIPE_SPEED = 0.005 * canvas.width; // Reset PIPE_SPEED
             createPipe();
@@ -156,8 +156,8 @@
                 pipes.shift();
                 score++;
 
-                // Increase PIPE_SPEED by 0.5% of canvas width per score
-                PIPE_SPEED += 0.005 * canvas.width;
+                // Increase PIPE_SPEED by 0.1% of canvas width per score
+                PIPE_SPEED += 0.001 * canvas.width;
 
                 if (score >= targetScore) {
                     gameWon = true;
@@ -170,7 +170,6 @@
             if (pipeTimer >= pipeDelay) {
                 createPipe();
                 pipeTimer = 0;
-                pipeDelay = Math.random() * 100 + 150;
             }
         }
 
