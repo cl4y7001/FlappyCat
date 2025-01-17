@@ -107,7 +107,7 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        let pipeDelay = 300; // Reduced delay to make pipes more frequent
+        let pipeDelay = 150; // Reduced delay to make pipes more frequent
         let pipeTimer = 0;
 
         function createPipe() {
@@ -124,7 +124,7 @@
             gameWon = false;
             congratsDiv.style.display = 'none';
             pipeTimer = 0;
-            pipeDelay = 100; // Reset delay for pipes
+            pipeDelay = 150; // Reset delay for pipes
             hasPlayedGameOverSound = false;
             PIPE_SPEED = 0.005 * canvas.width; // Reset PIPE_SPEED
             createPipe();
@@ -160,7 +160,7 @@
                 PIPE_SPEED += 0.001 * canvas.width;
 
                 // Dynamically adjust pipeDelay to avoid gaps
-                pipeDelay = Math.max(50, 100 - Math.floor(PIPE_SPEED * 2000));
+                pipeDelay = Math.max(50, 150 - Math.floor(PIPE_SPEED * 2000));
 
                 if (score >= targetScore) {
                     gameWon = true;
