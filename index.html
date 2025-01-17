@@ -68,7 +68,7 @@
         });
 
         let GRAVITY = 0.00000000001 * window.innerHeight;
-        let FLAP_STRENGTH = -0.15 * window.innerHeight;
+        let FLAP_STRENGTH = -0.16 * window.innerHeight;
         let PIPE_WIDTH = 0.15 * window.innerWidth;
         let PIPE_SPEED = 0.005 * window.innerWidth;
 
@@ -91,7 +91,7 @@
 
         function adjustGameConstants() {
             GRAVITY = 0.001 * canvas.height;
-            FLAP_STRENGTH = -0.015 * canvas.height;
+            FLAP_STRENGTH = -0.016 * canvas.height;
             PIPE_WIDTH = 0.15 * canvas.width;
             PIPE_SPEED = 0.005 * canvas.width;
 
@@ -160,7 +160,7 @@
                 PIPE_SPEED += 0.001 * canvas.width;
 
                 // Dynamically adjust pipeDelay to avoid gaps
-                pipeDelay = Math.max(50, 150 - Math.floor(PIPE_SPEED * 200));
+                pipeDelay = Math.max(50, 150 - Math.floor(PIPE_SPEED * 20));
 
                 if (score >= targetScore) {
                     gameWon = true;
