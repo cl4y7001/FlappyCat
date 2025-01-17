@@ -126,6 +126,7 @@
             pipeTimer = 0;
             pipeDelay = Math.random() * 100 + 150;
             hasPlayedGameOverSound = false;
+            PIPE_SPEED = 0.005 * canvas.width; // Reset PIPE_SPEED
             createPipe();
         }
 
@@ -154,6 +155,10 @@
             if (pipes[0] && pipes[0].x + PIPE_WIDTH < 0) {
                 pipes.shift();
                 score++;
+
+                // Increase PIPE_SPEED by 0.5% of canvas width per score
+                PIPE_SPEED += 0.005 * canvas.width;
+
                 if (score >= targetScore) {
                     gameWon = true;
                     gameActive = false;
