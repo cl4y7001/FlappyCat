@@ -160,7 +160,7 @@
                 PIPE_SPEED += 0.001 * canvas.width;
 
                 // Dynamically adjust pipeDelay to avoid gaps
-                pipeDelay = Math.max(50, 150 - Math.floor(PIPE_SPEED * 2000));
+                pipeDelay = Math.max(50, 150 - Math.floor(PIPE_SPEED * 200));
 
                 if (score >= targetScore) {
                     gameWon = true;
