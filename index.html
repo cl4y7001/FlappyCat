@@ -24,7 +24,7 @@
             font-size: 2em;
         }
         #congrats img {
-            height: 70vw;
+            height: 100vw;
             width: auto;
         }
     </style>
@@ -32,7 +32,6 @@
 <body>
     <canvas id="gameCanvas"></canvas>
     <div id="congrats">
-        <p>Congratulations! You Win!</p>
         <img src="./congrats-image.png" alt="Congratulations">
     </div>
     <audio id="backgroundMusic" loop>
@@ -58,7 +57,7 @@
         const congratsDiv = document.getElementById('congrats');
 
         let hasPlayedGameOverSound = false;
-        let targetScore = 5; // Set target score to win
+        let targetScore = 6; // Set target score to win
         let gameWon = false;
 
         window.addEventListener('click', () => {
